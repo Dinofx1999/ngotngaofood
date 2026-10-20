@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api';
 import ProductCard from '../components/ProductCard';
-import { useSettings } from '../context/SettingsContext';
+import { DEFAULT_HERO_IMAGE, useSettings } from '../context/SettingsContext';
 import { formatPrice } from '../utils';
 
 export default function Home() {
@@ -20,12 +20,9 @@ export default function Home() {
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <span className="tag">Tiệm bánh thủ công</span>
-            <h1>Ngọt ngào trong từng chiếc bánh</h1>
-            <p className="lead">
-              Bánh kem, bánh ngọt và bánh mì tươi làm mới mỗi ngày từ nguyên liệu tự nhiên.
-              Đặt hàng online, giao tận nơi trong 2 giờ.
-            </p>
+            {settings.heroTag && <span className="tag">{settings.heroTag}</span>}
+            <h1>{settings.heroTitle}</h1>
+            <p className="lead">{settings.heroSubtitle}</p>
             <div className="hero-actions">
               <Link to="/thuc-don" className="btn btn-primary btn-lg">Xem thực đơn</Link>
               <Link to="/tra-cuu" className="btn btn-outline btn-lg">Tra cứu đơn hàng</Link>
@@ -33,8 +30,8 @@ export default function Home() {
           </div>
           <img
             className="hero-img"
-            src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900&q=80"
-            alt="Bánh kem Ngọt Ngào Food"
+            src={settings.heroImage || DEFAULT_HERO_IMAGE}
+            alt={settings.name}
             onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/placeholder.svg'; }}
           />
         </div>

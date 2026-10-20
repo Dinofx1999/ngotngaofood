@@ -16,7 +16,14 @@ export const DEFAULT_SETTINGS = {
   bankOwner: '',
   freeShipFrom: 300000,
   shippingFee: 20000,
+  heroTag: 'Tiệm bánh thủ công',
+  heroTitle: 'Ngọt ngào trong từng chiếc bánh',
+  heroSubtitle: 'Bánh kem, bánh ngọt và bánh mì tươi làm mới mỗi ngày từ nguyên liệu tự nhiên. Đặt hàng online, giao tận nơi trong 2 giờ.',
+  heroImage: '',
 };
+
+// Ảnh lớn trang chủ mặc định khi chưa cài đặt
+export const DEFAULT_HERO_IMAGE = 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900&q=80';
 
 const SettingsContext = createContext({ settings: DEFAULT_SETTINGS, refresh: () => {} });
 

@@ -15,9 +15,14 @@ const DEFAULTS = {
   bankOwner: '',
   freeShipFrom: 300000,
   shippingFee: 20000,
+  heroTag: 'Tiệm bánh thủ công',
+  heroTitle: 'Ngọt ngào trong từng chiếc bánh',
+  heroSubtitle: 'Bánh kem, bánh ngọt và bánh mì tươi làm mới mỗi ngày từ nguyên liệu tự nhiên. Đặt hàng online, giao tận nơi trong 2 giờ.',
+  heroImage: '',
 };
 
-const STRING_FIELDS = ['name', 'tagline', 'address', 'phone', 'email', 'openingHours', 'facebook', 'zalo', 'bankName', 'bankAccount', 'bankOwner'];
+const STRING_FIELDS = ['name', 'tagline', 'address', 'phone', 'email', 'openingHours', 'facebook', 'zalo', 'bankName', 'bankAccount', 'bankOwner', 'heroTag', 'heroTitle', 'heroSubtitle', 'heroImage'];
+const MAX_LENGTH = { heroImage: 1000, heroSubtitle: 500 };
 const NUMBER_FIELDS = ['freeShipFrom', 'shippingFee'];
 
 function getSettings() {
@@ -30,7 +35,7 @@ function getSettings() {
 function parseSettings(body, current) {
   const next = { ...current };
   for (const key of STRING_FIELDS) {
-    if (body[key] !== undefined) next[key] = String(body[key]).trim().slice(0, 300);
+    if (body[key] !== undefined) next[key] = String(body[key]).trim().slice(0, MAX_LENGTH[key] || 300);
   }
   for (const key of NUMBER_FIELDS) {
     if (body[key] !== undefined) {

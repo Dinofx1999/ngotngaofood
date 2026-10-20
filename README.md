@@ -17,7 +17,7 @@ Website bán bánh đơn giản, dễ dùng, xây dựng bằng **Node.js (Expre
 - Tab **Đơn hàng**: xem toàn bộ đơn, thống kê nhanh, lọc và cập nhật trạng thái (Chờ xác nhận → Đã xác nhận → Đang giao → Hoàn thành / Đã hủy)
 - Tab **Sản phẩm**: thêm / sửa / xóa bánh, tải ảnh từ máy lên hoặc dán link ảnh, đánh dấu "bán chạy"
 - Tab **Danh mục**: thêm / đổi tên / đổi biểu tượng / sắp xếp / xóa danh mục bánh (không xóa được danh mục còn bánh)
-- Tab **Cửa hàng**: sửa tên, slogan, địa chỉ, điện thoại, email, giờ mở cửa, link Facebook/Zalo, thông tin chuyển khoản, phí giao hàng
+- Tab **Cửa hàng**: đổi ảnh lớn và câu chào ở trang chủ; sửa tên, slogan, địa chỉ, điện thoại, email, giờ mở cửa, link Facebook/Zalo, thông tin chuyển khoản, phí giao hàng
 - Mã quản trị mặc định: `ngotngao123` (đổi bằng biến môi trường `ADMIN_KEY`)
 
 ## Cấu trúc thư mục
@@ -93,7 +93,7 @@ Danh mục bánh sửa ở tab **Danh mục** trong trang quản trị: thêm t�
 
 ## Sửa thông tin cửa hàng
 
-Vào trang quản trị, tab **Cửa hàng**: sửa tên, địa chỉ, điện thoại, giờ mở cửa, link mạng xã hội, tài khoản chuyển khoản và phí giao hàng rồi bấm **Lưu thay đổi**. Thông tin hiện ngay ở chân trang và trang thanh toán.
+Vào trang quản trị, tab **Cửa hàng**: mục **Trang chủ** đổi ảnh lớn (tải từ máy hoặc dán link, nên dùng ảnh ngang tỉ lệ 4:3), nhãn nhỏ, tiêu đề và câu mô tả đầu trang; các mục dưới sửa tên, địa chỉ, điện thoại, giờ mở cửa, link mạng xã hội, tài khoản chuyển khoản và phí giao hàng. Bấm **Lưu thay đổi** là áp dụng ngay.
 
 Dữ liệu thật nằm ở `server/data/products.json`, `server/data/categories.json`, `server/data/orders.json`, `server/data/settings.json` và ảnh ở `server/uploads/`. Các file này không đưa lên git, nên `git pull` trên máy chủ không làm mất dữ liệu. Nhớ sao lưu các file này định kỳ.
 

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../api';
-import { useSettings, useSettingsRefresh } from '../../context/SettingsContext';
+import { DEFAULT_HERO_IMAGE, useSettings, useSettingsRefresh } from '../../context/SettingsContext';
 import { useToast } from '../../context/ToastContext';
+import ProductImage from '../ProductImage';
 
 const FIELDS = [
   { key: 'name', label: 'Tên cửa hàng *', placeholder: 'Ngọt Ngào Food' },
@@ -27,10 +28,27 @@ export default function SettingsPanel({ adminKey }) {
   const [form, setForm] = useState(settings);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => setForm(settings), [settings]);
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
+
+  const handleHeroFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError('');
+    try {
+      const { url } = await api.adminUploadImage(adminKey, file);
+      set('heroImage', url);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,6 +84,35 @@ export default function SettingsPanel({ adminKey }) {
 
   return (
     <form className="form-card" onSubmit={handleSubmit}>
+      <h3>Trang chủ</h3>
+      <p className="muted small">Ảnh lớn và câu chào ở đầu trang chủ.</p>
+      <div className="field">
+        <span>Ảnh lớn trang chủ</span>
+        <div className="image-picker">
+          <ProductImage src={form.heroImage || DEFAULT_HERO_IMAGE} alt="Ảnh trang chủ" className="image-preview hero-preview" />
+          <div className="image-picker-controls">
+            <input type="file" accept="image/*" onChange={handleHeroFile} disabled={uploading} />
+            {uploading && <div className="muted small">Đang tải ảnh lên...</div>}
+            <input value={form.heroImage ?? ''} onChange={(e) => set('heroImage', e.target.value)} placeholder="Hoặc dán link ảnh: https://... (để trống = ảnh mặc định)" />
+            <div className="muted small">Nên dùng ảnh ngang, tỉ lệ 4:3, tối đa 5MB.</div>
+          </div>
+        </div>
+      </div>
+      <div className="form-grid">
+        <label className="field">
+          <span>Nhãn nhỏ phía trên tiêu đề</span>
+          <input value={form.heroTag ?? ''} onChange={(e) => set('heroTag', e.target.value)} placeholder="Tiệm bánh thủ công" />
+        </label>
+        <label className="field">
+          <span>Tiêu đề lớn</span>
+          <input value={form.heroTitle ?? ''} onChange={(e) => set('heroTitle', e.target.value)} placeholder="Ngọt ngào trong từng chiếc bánh" />
+        </label>
+        <label className="field field-full">
+          <span>Câu mô tả dưới tiêu đề</span>
+          <textarea rows="2" value={form.heroSubtitle ?? ''} onChange={(e) => set('heroSubtitle', e.target.value)} placeholder="Bánh tươi làm mới mỗi ngày..." />
+        </label>
+      </div>
+
       <h3>Thông tin cửa hàng & liên hệ</h3>
       <p className="muted small">Hiển thị ở chân trang và trang thanh toán. Để trống mục nào thì mục đó sẽ không hiện.</p>
       <div className="form-grid">{FIELDS.map(renderField)}</div>
@@ -88,7 +135,7 @@ export default function SettingsPanel({ adminKey }) {
 
       {error && <div className="alert">{error}</div>}
       <div className="row-actions">
-        <button className="btn btn-primary" type="submit" disabled={saving}>{saving ? 'Đang lưu...' : 'Lưu thay đổi'}</button>
+        <button className="btn btn-primary" type="submit" disabled={saving || uploading}>{saving ? 'Đang lưu...' : 'Lưu thay đổi'}</button>
       </div>
     </form>
   );
