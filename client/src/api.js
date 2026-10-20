@@ -34,6 +34,15 @@ export const api = {
   adminUpdateSettings: (key, data) =>
     request('/settings', { method: 'PUT', headers: adminHeaders(key), body: JSON.stringify(data) }),
 
+  // Quản trị: danh mục
+  adminCreateCategory: (key, data) =>
+    request('/categories', { method: 'POST', headers: adminHeaders(key), body: JSON.stringify(data) }),
+  adminUpdateCategory: (key, id, data) =>
+    request(`/categories/${id}`, { method: 'PUT', headers: adminHeaders(key), body: JSON.stringify(data) }),
+  adminDeleteCategory: (key, id) => request(`/categories/${id}`, { method: 'DELETE', headers: adminHeaders(key) }),
+  adminReorderCategories: (key, ids) =>
+    request('/categories/order', { method: 'PUT', headers: adminHeaders(key), body: JSON.stringify({ ids }) }),
+
   // Quản trị: sản phẩm
   adminCreateProduct: (key, data) =>
     request('/products', { method: 'POST', headers: adminHeaders(key), body: JSON.stringify(data) }),

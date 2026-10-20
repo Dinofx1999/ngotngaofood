@@ -6,7 +6,7 @@ const fs = require('fs');
 const productsRouter = require('./routes/products');
 const ordersRouter = require('./routes/orders');
 const settingsRouter = require('./routes/settings');
-const { CATEGORIES } = require('./categories');
+const categoriesRouter = require('./routes/categories');
 
 const app = express();
 const PORT = process.env.PORT || 5050;
@@ -16,7 +16,7 @@ app.use(express.json());
 
 // API
 app.get('/api/health', (req, res) => res.json({ ok: true, name: 'Ngọt Ngào Food API' }));
-app.get('/api/categories', (req, res) => res.json(CATEGORIES));
+app.use('/api/categories', categoriesRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/settings', settingsRouter);

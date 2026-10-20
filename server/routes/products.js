@@ -4,7 +4,8 @@ const fs = require('fs');
 const multer = require('multer');
 const db = require('../db');
 const { requireAdmin } = require('../auth');
-const { CATEGORIES } = require('../categories');
+const { getCategories } = require('../categories');
+const { normalize, slugify, uniqueId } = require('../text');
 
 const router = express.Router();
 
@@ -27,20 +28,6 @@ const upload = multer({
   },
 });
 
-// Bỏ dấu tiếng Việt để tìm kiếm không phân biệt dấu ("banh kem" vẫn tìm được "Bánh kem")
-function normalize(str = '') {
-  return String(str)
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/đ/g, 'd')
-    .replace(/Đ/g, 'D')
-    .toLowerCase();
-}
-
-function slugify(str) {
-  return normalize(str).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'san-pham';
-}
-
 // Kiểm tra và chuẩn hóa dữ liệu sản phẩm gửi lên
 function parseProduct(body) {
   const name = String(body.name || '').trim();
@@ -52,7 +39,7 @@ function parseProduct(body) {
   const featured = body.featured === true || body.featured === 'true';
 
   if (name.length < 2) return { error: 'Vui lòng nhập tên sản phẩm' };
-  if (!CATEGORIES.some((c) => c.id === category)) return { error: 'Danh mục không hợp lệ' };
+  if (!getCategories().some((c) => c.id === category)) return { error: 'Danh mục không hợp lệ' };
   if (!Number.isFinite(price) || price < 0) return { error: 'Giá không hợp lệ' };
 
   return { data: { name, category, price: Math.round(price), unit, description, image, featured } };
@@ -100,10 +87,7 @@ router.post('/', requireAdmin, (req, res) => {
   if (error) return res.status(400).json({ message: error });
 
   const products = db.read('products');
-  const base = slugify(data.name);
-  let id = base;
-  let n = 2;
-  while (products.some((p) => p.id === id)) id = `${base}-${n++}`;
+  const id = uniqueId(slugify(data.name, 'san-pham'), products.map((p) => p.id));
 
   const product = { id, ...data };
   products.push(product);

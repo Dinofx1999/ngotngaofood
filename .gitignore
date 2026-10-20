@@ -6,3 +6,4 @@ server/data/products.json
 server/data/orders.json
 server/uploads/
 server/data/settings.json
+server/data/categories.json

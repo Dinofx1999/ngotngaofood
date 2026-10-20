@@ -3,6 +3,7 @@ import { api } from '../api';
 import OrdersPanel from '../components/admin/OrdersPanel';
 import ProductsPanel from '../components/admin/ProductsPanel';
 import SettingsPanel from '../components/admin/SettingsPanel';
+import CategoriesPanel from '../components/admin/CategoriesPanel';
 
 const KEY_STORAGE = 'ngotngao_admin_key';
 
@@ -61,11 +62,13 @@ export default function Admin() {
       <div className="tabs">
         <button className={tab === 'orders' ? 'active' : ''} onClick={() => setTab('orders')}>📦 Đơn hàng</button>
         <button className={tab === 'products' ? 'active' : ''} onClick={() => setTab('products')}>🧁 Sản phẩm</button>
+        <button className={tab === 'categories' ? 'active' : ''} onClick={() => setTab('categories')}>📂 Danh mục</button>
         <button className={tab === 'settings' ? 'active' : ''} onClick={() => setTab('settings')}>🏪 Cửa hàng</button>
       </div>
 
       {tab === 'orders' && <OrdersPanel adminKey={adminKey} onAuthError={(msg) => logout(msg)} />}
       {tab === 'products' && <ProductsPanel adminKey={adminKey} />}
+      {tab === 'categories' && <CategoriesPanel adminKey={adminKey} />}
       {tab === 'settings' && <SettingsPanel adminKey={adminKey} />}
     </div>
   );

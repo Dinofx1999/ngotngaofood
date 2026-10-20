@@ -16,6 +16,7 @@ Website bán bánh đơn giản, dễ dùng, xây dựng bằng **Node.js (Expre
 **Quản trị** (`/admin`)
 - Tab **Đơn hàng**: xem toàn bộ đơn, thống kê nhanh, lọc và cập nhật trạng thái (Chờ xác nhận → Đã xác nhận → Đang giao → Hoàn thành / Đã hủy)
 - Tab **Sản phẩm**: thêm / sửa / xóa bánh, tải ảnh từ máy lên hoặc dán link ảnh, đánh dấu "bán chạy"
+- Tab **Danh mục**: thêm / đổi tên / đổi biểu tượng / sắp xếp / xóa danh mục bánh (không xóa được danh mục còn bánh)
 - Tab **Cửa hàng**: sửa tên, slogan, địa chỉ, điện thoại, email, giờ mở cửa, link Facebook/Zalo, thông tin chuyển khoản, phí giao hàng
 - Mã quản trị mặc định: `ngotngao123` (đổi bằng biến môi trường `ADMIN_KEY`)
 
@@ -28,15 +29,19 @@ NgotNgaoFood/
 │   ├── db.js               # Đọc/ghi dữ liệu file JSON
 │   ├── auth.js             # Kiểm tra mã quản trị
 │   ├── settings.js         # Thông tin cửa hàng (đọc/ghi, kiểm tra dữ liệu)
-│   ├── categories.js       # Danh mục bánh
+│   ├── categories.js       # Danh mục bánh (đọc/ghi, kiểm tra dữ liệu)
+│   ├── text.js             # Bỏ dấu tiếng Việt, tạo mã (slug)
 │   ├── routes/
 │   │   ├── products.js     # API sản phẩm (xem, thêm, sửa, xóa, tải ảnh)
 │   │   ├── orders.js       # API đơn hàng
+│   │   ├── categories.js   # API danh mục (xem, thêm, sửa, sắp xếp, xóa)
 │   │   └── settings.js     # API thông tin cửa hàng
 │   ├── uploads/            # Ảnh sản phẩm tải lên (tự tạo, không đưa lên git)
 │   └── data/
 │       ├── products.seed.json  # Dữ liệu bánh mẫu (có trong git)
 │       ├── products.json       # Dữ liệu bánh thật, tự tạo từ file seed lần đầu chạy (không đưa lên git)
+│       ├── categories.seed.json # Danh mục mẫu (có trong git)
+│       ├── categories.json     # Danh mục thật, tự tạo từ seed (không đưa lên git)
 │       ├── settings.seed.json  # Thông tin cửa hàng mẫu (có trong git)
 │       ├── settings.json       # Thông tin cửa hàng thật, tự tạo từ seed (không đưa lên git)
 │       └── orders.json         # Đơn hàng, tự ghi khi khách đặt (không đưa lên git)
@@ -44,7 +49,7 @@ NgotNgaoFood/
     └── src/
         ├── pages/          # Các trang: Home, Menu, ProductDetail, Cart, Checkout, OrderPage, TrackOrder, Admin
         ├── components/     # Header, Footer, ProductCard, QuantityInput, ...
-        │   └── admin/      # OrdersPanel, ProductsPanel, ProductForm, SettingsPanel (trang quản trị)
+        │   └── admin/      # OrdersPanel, ProductsPanel, ProductForm, CategoriesPanel, SettingsPanel (trang quản trị)
         ├── context/        # CartContext (giỏ hàng), ToastContext (thông báo), SettingsContext (thông tin cửa hàng)
         ├── api.js          # Gọi API
         └── index.css       # Toàn bộ giao diện
@@ -84,19 +89,23 @@ Vào **http://localhost:3000/admin** (hoặc địa chỉ web của bạn + `/ad
 - Bấm **Lưu sản phẩm**. Bánh hiện ngay trên thực đơn, không cần khởi động lại.
 - Mỗi dòng sản phẩm có nút **Sửa** và **Xóa**.
 
-Danh mục bánh (Bánh kem, Bánh ngọt, Bánh mì, Bánh quy) sửa trong `server/categories.js`.
+Danh mục bánh sửa ở tab **Danh mục** trong trang quản trị: thêm tên và biểu tượng (emoji), dùng nút ↑ ↓ để đổi thứ tự hiển thị.
 
 ## Sửa thông tin cửa hàng
 
 Vào trang quản trị, tab **Cửa hàng**: sửa tên, địa chỉ, điện thoại, giờ mở cửa, link mạng xã hội, tài khoản chuyển khoản và phí giao hàng rồi bấm **Lưu thay đổi**. Thông tin hiện ngay ở chân trang và trang thanh toán.
 
-Dữ liệu thật nằm ở `server/data/products.json`, `server/data/orders.json`, `server/data/settings.json` và ảnh ở `server/uploads/`. Các file này không đưa lên git, nên `git pull` trên máy chủ không làm mất dữ liệu. Nhớ sao lưu các file này định kỳ.
+Dữ liệu thật nằm ở `server/data/products.json`, `server/data/categories.json`, `server/data/orders.json`, `server/data/settings.json` và ảnh ở `server/uploads/`. Các file này không đưa lên git, nên `git pull` trên máy chủ không làm mất dữ liệu. Nhớ sao lưu các file này định kỳ.
 
 ## API
 
 | Phương thức | Đường dẫn | Mô tả |
 |---|---|---|
 | GET | `/api/categories` | Danh mục |
+| POST | `/api/categories` | Thêm danh mục (cần header `x-admin-key`) |
+| PUT | `/api/categories/:id` | Sửa danh mục (cần header `x-admin-key`) |
+| PUT | `/api/categories/order` | Sắp xếp danh mục, body `{ ids: [...] }` (cần header `x-admin-key`) |
+| DELETE | `/api/categories/:id` | Xóa danh mục trống (cần header `x-admin-key`) |
 | GET | `/api/settings` | Thông tin cửa hàng |
 | PUT | `/api/settings` | Sửa thông tin cửa hàng (cần header `x-admin-key`) |
 | GET | `/api/products?category=&q=&featured=` | Danh sách bánh |
