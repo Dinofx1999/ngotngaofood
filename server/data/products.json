@@ -1,0 +1,142 @@
+[
+  {
+    "id": "banh-kem-dau-tay",
+    "name": "Bánh kem dâu tây",
+    "category": "banh-kem",
+    "price": 250000,
+    "unit": "cái (size 18cm)",
+    "description": "Cốt bánh bông lan mềm mịn, kem tươi béo nhẹ phủ dâu tây Đà Lạt tươi mỗi ngày. Phù hợp sinh nhật, kỷ niệm.",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&q=80",
+    "featured": true
+  },
+  {
+    "id": "banh-kem-socola",
+    "name": "Bánh kem socola",
+    "category": "banh-kem",
+    "price": 280000,
+    "unit": "cái (size 18cm)",
+    "description": "Cốt socola đậm vị, kem ganache socola Bỉ mượt mà, ít ngọt. Món tủ của các tín đồ socola.",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=80",
+    "featured": true
+  },
+  {
+    "id": "banh-kem-sinh-nhat-vani",
+    "name": "Bánh kem sinh nhật vani",
+    "category": "banh-kem",
+    "price": 320000,
+    "unit": "cái (size 20cm)",
+    "description": "Bánh kem vani cổ điển trang trí hoa kem, có thể ghi chữ theo yêu cầu. Ghi lời chúc vào phần ghi chú khi đặt hàng.",
+    "image": "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=800&q=80",
+    "featured": false
+  },
+  {
+    "id": "tiramisu",
+    "name": "Tiramisu",
+    "category": "banh-ngot",
+    "price": 65000,
+    "unit": "hộp",
+    "description": "Lớp bánh sampa thấm cà phê espresso xen kẽ kem mascarpone, rắc cacao nguyên chất. Vị đắng nhẹ, béo vừa.",
+    "image": "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&q=80",
+    "featured": true
+  },
+  {
+    "id": "cheesecake-chanh-day",
+    "name": "Cheesecake chanh dây",
+    "category": "banh-ngot",
+    "price": 55000,
+    "unit": "miếng",
+    "description": "Cheesecake nướng béo mịn, phủ sốt chanh dây chua ngọt cân bằng. Đế bánh quy bơ giòn.",
+    "image": "https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=800&q=80",
+    "featured": false
+  },
+  {
+    "id": "banh-su-kem",
+    "name": "Bánh su kem",
+    "category": "banh-ngot",
+    "price": 15000,
+    "unit": "cái",
+    "description": "Vỏ su giòn nhẹ, nhân kem trứng vani thơm béo, làm mới mỗi sáng. Mua 10 tặng 1.",
+    "image": "https://images.unsplash.com/photo-1587668178277-295251f900ce?w=800&q=80",
+    "featured": false
+  },
+  {
+    "id": "cupcake-red-velvet",
+    "name": "Cupcake Red Velvet",
+    "category": "banh-ngot",
+    "price": 35000,
+    "unit": "cái",
+    "description": "Cốt red velvet đỏ mềm ẩm, kem cream cheese chua nhẹ phía trên. Nhỏ xinh, tiện làm quà.",
+    "image": "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=800&q=80",
+    "featured": true
+  },
+  {
+    "id": "macaron-hop-6",
+    "name": "Macaron (hộp 6 vị)",
+    "category": "banh-ngot",
+    "price": 120000,
+    "unit": "hộp 6 cái",
+    "description": "Hộp 6 macaron Pháp: dâu, chanh, socola, trà xanh, caramel muối, vani. Vỏ giòn, nhân mềm tan.",
+    "image": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=800&q=80",
+    "featured": false
+  },
+  {
+    "id": "banh-bong-lan-trung-muoi",
+    "name": "Bánh bông lan trứng muối",
+    "category": "banh-ngot",
+    "price": 45000,
+    "unit": "hộp 4 cái",
+    "description": "Bông lan mềm xốp, sốt phô mai béo, trứng muối bùi và chà bông mặn ngọt hài hòa.",
+    "image": "https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=800&q=80",
+    "featured": false
+  },
+  {
+    "id": "donut-duong",
+    "name": "Donut phủ đường",
+    "category": "banh-ngot",
+    "price": 18000,
+    "unit": "cái",
+    "description": "Donut chiên vàng mềm xốp, phủ đường bột hoặc socola. Ăn kèm cà phê sáng rất hợp.",
+    "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=800&q=80",
+    "featured": false
+  },
+  {
+    "id": "croissant-bo",
+    "name": "Croissant bơ",
+    "category": "banh-mi",
+    "price": 30000,
+    "unit": "cái",
+    "description": "Bánh sừng bò ngàn lớp, dùng bơ lạt Pháp, nướng giòn thơm nức. Ngon nhất khi còn ấm.",
+    "image": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&q=80",
+    "featured": true
+  },
+  {
+    "id": "banh-mi-bo-toi",
+    "name": "Bánh mì bơ tỏi",
+    "category": "banh-mi",
+    "price": 25000,
+    "unit": "ổ",
+    "description": "Bánh mì mềm phết bơ tỏi tự làm, nướng vàng, thơm lừng. Có thể hâm lại bằng lò nướng 3 phút.",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80",
+    "featured": false
+  },
+  {
+    "id": "banh-quy-bo",
+    "name": "Bánh quy bơ (hộp 250g)",
+    "category": "banh-quy",
+    "price": 85000,
+    "unit": "hộp 250g",
+    "description": "Bánh quy bơ Đan Mạch giòn tan, thơm bơ. Đóng hộp thiếc xinh xắn, hợp làm quà biếu.",
+    "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&q=80",
+    "featured": false
+  },
+  {
+    "id": "cookies-socola-chip",
+    "name": "Cookies socola chip",
+    "category": "banh-quy",
+    "price": 20000,
+    "unit": "cái",
+    "description": "Cookies cỡ lớn, viền giòn ruột mềm, đầy ắp socola chip. Bán chạy nhất tại cửa hàng.",
+    "image": "https://images.unsplash.com/photo-1590080874088-eec64895b423?w=800&q=80",
+    "featured": true
+  }
+]
