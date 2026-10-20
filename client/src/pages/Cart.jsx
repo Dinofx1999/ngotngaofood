@@ -2,11 +2,13 @@ import { Link } from 'react-router-dom';
 import ProductImage from '../components/ProductImage';
 import QuantityInput from '../components/QuantityInput';
 import { useCart } from '../context/CartContext';
-import { formatPrice, FREE_SHIP_FROM, SHIPPING_FEE } from '../utils';
+import { calcShipping, useSettings } from '../context/SettingsContext';
+import { formatPrice } from '../utils';
 
 export default function Cart() {
   const { items, subtotal, updateQuantity, removeItem, clearCart } = useCart();
-  const shippingFee = subtotal >= FREE_SHIP_FROM ? 0 : SHIPPING_FEE;
+  const settings = useSettings();
+  const shippingFee = calcShipping(subtotal, settings);
 
   if (items.length === 0) {
     return (
@@ -50,7 +52,7 @@ export default function Cart() {
             <span>{shippingFee === 0 ? 'Miễn phí' : formatPrice(shippingFee)}</span>
           </div>
           {shippingFee > 0 && (
-            <div className="muted small">Mua thêm {formatPrice(FREE_SHIP_FROM - subtotal)} để được miễn phí giao hàng</div>
+            <div className="muted small">Mua thêm {formatPrice(settings.freeShipFrom - subtotal)} để được miễn phí giao hàng</div>
           )}
           <div className="summary-row summary-total"><span>Tổng cộng</span><span>{formatPrice(subtotal + shippingFee)}</span></div>
           <Link to="/thanh-toan" className="btn btn-primary btn-block">Tiến hành đặt hàng</Link>

@@ -239,3 +239,10 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 12px 0; }
   .product-admin-row { grid-template-columns: 64px 1fr; }
   .product-admin-row .price, .product-admin-row .row-actions { grid-column: 2; }
 }
+
+/* Admin: cài đặt cửa hàng */
+.form-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.field-full { grid-column: 1 / -1; }
+.social { display: flex; gap: 12px; }
+.social a { color: var(--pink-dark); font-weight: 700; }
+@media (max-width: 640px) { .form-grid-3 { grid-template-columns: 1fr; } }

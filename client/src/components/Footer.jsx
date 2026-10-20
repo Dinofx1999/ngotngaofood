@@ -1,18 +1,28 @@
 import { Link } from 'react-router-dom';
+import { useSettings } from '../context/SettingsContext';
 
 export default function Footer() {
+  const s = useSettings();
+
   return (
     <footer className="footer">
       <div className="container footer-grid">
         <div>
-          <div className="logo"><span className="logo-icon">🧁</span> Ngọt Ngào Food</div>
-          <p className="muted">Bánh tươi làm mới mỗi ngày, nguyên liệu tự nhiên, ít ngọt, giao tận nơi.</p>
+          <div className="logo"><span className="logo-icon">🧁</span> {s.name}</div>
+          <p className="muted">{s.tagline}</p>
+          {(s.facebook || s.zalo) && (
+            <p className="social">
+              {s.facebook && <a href={s.facebook} target="_blank" rel="noreferrer">Facebook</a>}
+              {s.zalo && <a href={s.zalo} target="_blank" rel="noreferrer">Zalo</a>}
+            </p>
+          )}
         </div>
         <div>
           <h4>Liên hệ</h4>
-          <p className="muted">📍 123 Nguyễn Huệ, Quận 1, TP. HCM</p>
-          <p className="muted">📞 0909 123 456</p>
-          <p className="muted">🕗 7:00 – 21:00 hằng ngày</p>
+          {s.address && <p className="muted">📍 {s.address}</p>}
+          {s.phone && <p className="muted">📞 <a href={`tel:${s.phone.replace(/\s/g, '')}`}>{s.phone}</a></p>}
+          {s.email && <p className="muted">✉️ <a href={`mailto:${s.email}`}>{s.email}</a></p>}
+          {s.openingHours && <p className="muted">🕗 {s.openingHours}</p>}
         </div>
         <div>
           <h4>Liên kết</h4>
@@ -21,7 +31,7 @@ export default function Footer() {
           <p><Link to="/admin">Quản trị</Link></p>
         </div>
       </div>
-      <div className="container footer-bottom muted">© {new Date().getFullYear()} Ngọt Ngào Food</div>
+      <div className="container footer-bottom muted">© {new Date().getFullYear()} {s.name}</div>
     </footer>
   );
 }

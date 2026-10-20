@@ -16,6 +16,7 @@ const adminHeaders = (key) => ({ 'x-admin-key': key });
 
 export const api = {
   getCategories: () => request('/categories'),
+  getSettings: () => request('/settings'),
   getProducts: (params = {}) => {
     const query = new URLSearchParams(params).toString();
     return request('/products' + (query ? `?${query}` : ''));
@@ -28,6 +29,10 @@ export const api = {
   adminGetOrders: (key) => request('/orders', { headers: adminHeaders(key) }),
   adminUpdateStatus: (key, id, status) =>
     request(`/orders/${id}/status`, { method: 'PATCH', headers: adminHeaders(key), body: JSON.stringify({ status }) }),
+
+  // Quản trị: thông tin cửa hàng
+  adminUpdateSettings: (key, data) =>
+    request('/settings', { method: 'PUT', headers: adminHeaders(key), body: JSON.stringify(data) }),
 
   // Quản trị: sản phẩm
   adminCreateProduct: (key, data) =>

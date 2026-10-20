@@ -16,6 +16,7 @@ Website bán bánh đơn giản, dễ dùng, xây dựng bằng **Node.js (Expre
 **Quản trị** (`/admin`)
 - Tab **Đơn hàng**: xem toàn bộ đơn, thống kê nhanh, lọc và cập nhật trạng thái (Chờ xác nhận → Đã xác nhận → Đang giao → Hoàn thành / Đã hủy)
 - Tab **Sản phẩm**: thêm / sửa / xóa bánh, tải ảnh từ máy lên hoặc dán link ảnh, đánh dấu "bán chạy"
+- Tab **Cửa hàng**: sửa tên, slogan, địa chỉ, điện thoại, email, giờ mở cửa, link Facebook/Zalo, thông tin chuyển khoản, phí giao hàng
 - Mã quản trị mặc định: `ngotngao123` (đổi bằng biến môi trường `ADMIN_KEY`)
 
 ## Cấu trúc thư mục
@@ -26,21 +27,25 @@ NgotNgaoFood/
 │   ├── index.js            # Khởi động server (cổng 5050)
 │   ├── db.js               # Đọc/ghi dữ liệu file JSON
 │   ├── auth.js             # Kiểm tra mã quản trị
+│   ├── settings.js         # Thông tin cửa hàng (đọc/ghi, kiểm tra dữ liệu)
 │   ├── categories.js       # Danh mục bánh
 │   ├── routes/
 │   │   ├── products.js     # API sản phẩm (xem, thêm, sửa, xóa, tải ảnh)
-│   │   └── orders.js       # API đơn hàng
+│   │   ├── orders.js       # API đơn hàng
+│   │   └── settings.js     # API thông tin cửa hàng
 │   ├── uploads/            # Ảnh sản phẩm tải lên (tự tạo, không đưa lên git)
 │   └── data/
 │       ├── products.seed.json  # Dữ liệu bánh mẫu (có trong git)
 │       ├── products.json       # Dữ liệu bánh thật, tự tạo từ file seed lần đầu chạy (không đưa lên git)
+│       ├── settings.seed.json  # Thông tin cửa hàng mẫu (có trong git)
+│       ├── settings.json       # Thông tin cửa hàng thật, tự tạo từ seed (không đưa lên git)
 │       └── orders.json         # Đơn hàng, tự ghi khi khách đặt (không đưa lên git)
 └── client/                 # Frontend React + Vite
     └── src/
         ├── pages/          # Các trang: Home, Menu, ProductDetail, Cart, Checkout, OrderPage, TrackOrder, Admin
         ├── components/     # Header, Footer, ProductCard, QuantityInput, ...
-        │   └── admin/      # OrdersPanel, ProductsPanel, ProductForm (trang quản trị)
-        ├── context/        # CartContext (giỏ hàng), ToastContext (thông báo)
+        │   └── admin/      # OrdersPanel, ProductsPanel, ProductForm, SettingsPanel (trang quản trị)
+        ├── context/        # CartContext (giỏ hàng), ToastContext (thông báo), SettingsContext (thông tin cửa hàng)
         ├── api.js          # Gọi API
         └── index.css       # Toàn bộ giao diện
 ```
@@ -81,13 +86,19 @@ Vào **http://localhost:3000/admin** (hoặc địa chỉ web của bạn + `/ad
 
 Danh mục bánh (Bánh kem, Bánh ngọt, Bánh mì, Bánh quy) sửa trong `server/categories.js`.
 
-Dữ liệu thật nằm ở `server/data/products.json`, `server/data/orders.json` và ảnh ở `server/uploads/`. Các file này không đưa lên git, nên `git pull` trên máy chủ không làm mất dữ liệu. Nhớ sao lưu các file này định kỳ.
+## Sửa thông tin cửa hàng
+
+Vào trang quản trị, tab **Cửa hàng**: sửa tên, địa chỉ, điện thoại, giờ mở cửa, link mạng xã hội, tài khoản chuyển khoản và phí giao hàng rồi bấm **Lưu thay đổi**. Thông tin hiện ngay ở chân trang và trang thanh toán.
+
+Dữ liệu thật nằm ở `server/data/products.json`, `server/data/orders.json`, `server/data/settings.json` và ảnh ở `server/uploads/`. Các file này không đưa lên git, nên `git pull` trên máy chủ không làm mất dữ liệu. Nhớ sao lưu các file này định kỳ.
 
 ## API
 
 | Phương thức | Đường dẫn | Mô tả |
 |---|---|---|
 | GET | `/api/categories` | Danh mục |
+| GET | `/api/settings` | Thông tin cửa hàng |
+| PUT | `/api/settings` | Sửa thông tin cửa hàng (cần header `x-admin-key`) |
 | GET | `/api/products?category=&q=&featured=` | Danh sách bánh |
 | GET | `/api/products/:id` | Chi tiết bánh |
 | POST | `/api/products` | Thêm bánh (cần header `x-admin-key`) |

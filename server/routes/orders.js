@@ -2,13 +2,12 @@ const express = require('express');
 const crypto = require('crypto');
 const db = require('../db');
 const { requireAdmin } = require('../auth');
+const { getSettings } = require('../settings');
 
 const router = express.Router();
 
 const STATUSES = ['pending', 'confirmed', 'delivering', 'done', 'cancelled'];
 const PAYMENT_METHODS = ['cod', 'bank'];
-const FREE_SHIP_FROM = 300000;
-const SHIPPING_FEE = 20000;
 
 function makeCode() {
   const ymd = new Date().toISOString().slice(2, 10).replace(/-/g, '');
@@ -58,8 +57,9 @@ router.post('/', (req, res) => {
     orderItems.push({ productId: product.id, name: product.name, price: product.price, quantity });
   }
 
+  const { freeShipFrom, shippingFee: fee } = getSettings();
   const subtotal = orderItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
-  const shippingFee = subtotal >= FREE_SHIP_FROM ? 0 : SHIPPING_FEE;
+  const shippingFee = subtotal >= freeShipFrom ? 0 : fee;
 
   const order = {
     id: crypto.randomUUID(),

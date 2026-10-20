@@ -5,6 +5,7 @@ const fs = require('fs');
 
 const productsRouter = require('./routes/products');
 const ordersRouter = require('./routes/orders');
+const settingsRouter = require('./routes/settings');
 const { CATEGORIES } = require('./categories');
 
 const app = express();
@@ -18,6 +19,7 @@ app.get('/api/health', (req, res) => res.json({ ok: true, name: 'Ngọt Ngào Fo
 app.get('/api/categories', (req, res) => res.json(CATEGORIES));
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
+app.use('/api/settings', settingsRouter);
 
 // Ảnh sản phẩm do quản trị tải lên
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

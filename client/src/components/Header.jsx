@@ -1,15 +1,17 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useSettings } from '../context/SettingsContext';
 
 export default function Header() {
   const { count } = useCart();
+  const { name } = useSettings();
 
   return (
     <header className="header">
       <div className="container">
         <Link to="/" className="logo">
           <span className="logo-icon">🧁</span>
-          <span>Ngọt Ngào Food</span>
+          <span>{name}</span>
         </Link>
         <nav className="nav">
           <NavLink to="/" end>Trang chủ</NavLink>

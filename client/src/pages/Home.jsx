@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api';
 import ProductCard from '../components/ProductCard';
+import { useSettings } from '../context/SettingsContext';
+import { formatPrice } from '../utils';
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
   const [categories, setCategories] = useState([]);
+  const settings = useSettings();
 
   useEffect(() => {
     api.getProducts({ featured: 'true' }).then(setFeatured).catch(() => setFeatured([]));
@@ -74,7 +77,7 @@ export default function Home() {
           <div className="feature">
             <div className="feature-icon">🚚</div>
             <h3>Giao hàng tận nơi</h3>
-            <p className="muted">Miễn phí giao hàng cho đơn từ 300.000 ₫ trong nội thành.</p>
+            <p className="muted">{settings.freeShipFrom > 0 ? `Miễn phí giao hàng cho đơn từ ${formatPrice(settings.freeShipFrom)}.` : 'Giao hàng tận nơi trong nội thành.'}</p>
           </div>
         </div>
       </section>

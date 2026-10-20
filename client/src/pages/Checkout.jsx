@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import { useCart } from '../context/CartContext';
-import { formatPrice, FREE_SHIP_FROM, SHIPPING_FEE, PAYMENT_LABELS } from '../utils';
+import { calcShipping, useSettings } from '../context/SettingsContext';
+import { formatPrice, PAYMENT_LABELS } from '../utils';
 
 export default function Checkout() {
   const { items, subtotal, clearCart } = useCart();
+  const settings = useSettings();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ name: '', phone: '', address: '', note: '' });
@@ -15,7 +17,7 @@ export default function Checkout() {
 
   if (items.length === 0) return <Navigate to="/gio-hang" replace />;
 
-  const shippingFee = subtotal >= FREE_SHIP_FROM ? 0 : SHIPPING_FEE;
+  const shippingFee = calcShipping(subtotal, settings);
   const total = subtotal + shippingFee;
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -73,7 +75,7 @@ export default function Checkout() {
           ))}
           {paymentMethod === 'bank' && (
             <div className="note-box">
-              Chuyển khoản tới <b>Vietcombank 0123456789 - NGOT NGAO FOOD</b>, nội dung: số điện thoại của bạn.
+              Chuyển khoản tới <b>{settings.bankName} {settings.bankAccount} - {settings.bankOwner}</b>, nội dung: số điện thoại của bạn.
               Đơn sẽ được xác nhận sau khi nhận được thanh toán.
             </div>
           )}
