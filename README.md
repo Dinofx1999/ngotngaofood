@@ -14,8 +14,8 @@ Website bán bánh đơn giản, dễ dùng, xây dựng bằng **Node.js (Expre
 - Tra cứu đơn hàng theo mã đơn
 
 **Quản trị** (`/admin`)
-- Xem toàn bộ đơn hàng, thống kê nhanh
-- Lọc và cập nhật trạng thái đơn (Chờ xác nhận → Đã xác nhận → Đang giao → Hoàn thành / Đã hủy)
+- Tab **Đơn hàng**: xem toàn bộ đơn, thống kê nhanh, lọc và cập nhật trạng thái (Chờ xác nhận → Đã xác nhận → Đang giao → Hoàn thành / Đã hủy)
+- Tab **Sản phẩm**: thêm / sửa / xóa bánh, tải ảnh từ máy lên hoặc dán link ảnh, đánh dấu "bán chạy"
 - Mã quản trị mặc định: `ngotngao123` (đổi bằng biến môi trường `ADMIN_KEY`)
 
 ## Cấu trúc thư mục
@@ -25,17 +25,21 @@ NgotNgaoFood/
 ├── server/                 # Backend Node.js + Express
 │   ├── index.js            # Khởi động server (cổng 5050)
 │   ├── db.js               # Đọc/ghi dữ liệu file JSON
+│   ├── auth.js             # Kiểm tra mã quản trị
 │   ├── categories.js       # Danh mục bánh
 │   ├── routes/
-│   │   ├── products.js     # API sản phẩm
+│   │   ├── products.js     # API sản phẩm (xem, thêm, sửa, xóa, tải ảnh)
 │   │   └── orders.js       # API đơn hàng
+│   ├── uploads/            # Ảnh sản phẩm tải lên (tự tạo, không đưa lên git)
 │   └── data/
-│       ├── products.json   # Danh sách bánh (sửa file này để thêm/bớt bánh)
-│       └── orders.json     # Đơn hàng (tự động ghi khi khách đặt)
+│       ├── products.seed.json  # Dữ liệu bánh mẫu (có trong git)
+│       ├── products.json       # Dữ liệu bánh thật, tự tạo từ file seed lần đầu chạy (không đưa lên git)
+│       └── orders.json         # Đơn hàng, tự ghi khi khách đặt (không đưa lên git)
 └── client/                 # Frontend React + Vite
     └── src/
         ├── pages/          # Các trang: Home, Menu, ProductDetail, Cart, Checkout, OrderPage, TrackOrder, Admin
         ├── components/     # Header, Footer, ProductCard, QuantityInput, ...
+        │   └── admin/      # OrdersPanel, ProductsPanel, ProductForm (trang quản trị)
         ├── context/        # CartContext (giỏ hàng), ToastContext (thông báo)
         ├── api.js          # Gọi API
         └── index.css       # Toàn bộ giao diện
@@ -46,7 +50,7 @@ NgotNgaoFood/
 Yêu cầu: Node.js 18 trở lên.
 
 ```bash
-npm run install:all   # cài đặt cho cả root, server và client
+npm install           # tự động cài cho cả root, server và client
 npm run dev           # chạy đồng thời server (5050) và client (3000)
 ```
 
@@ -67,24 +71,17 @@ ADMIN_KEY=matkhau-cua-ban npm start
 
 ## Thêm / sửa bánh
 
-Mở `server/data/products.json`, thêm một mục theo mẫu:
+Vào **http://localhost:3000/admin** (hoặc địa chỉ web của bạn + `/admin`), nhập mã quản trị, chọn tab **Sản phẩm**:
 
-```json
-{
-  "id": "banh-moi",
-  "name": "Bánh mới",
-  "category": "banh-ngot",
-  "price": 50000,
-  "unit": "cái",
-  "description": "Mô tả ngắn...",
-  "image": "https://link-anh-cua-ban.jpg",
-  "featured": true
-}
-```
+- Bấm **+ Thêm sản phẩm**, điền tên, danh mục, giá, đơn vị, mô tả.
+- Ảnh: bấm **Choose File** để tải ảnh từ máy (tối đa 5MB), hoặc dán link ảnh vào ô bên dưới.
+- Tick "Hiện ở mục Bánh bán chạy" nếu muốn bánh xuất hiện ở trang chủ.
+- Bấm **Lưu sản phẩm**. Bánh hiện ngay trên thực đơn, không cần khởi động lại.
+- Mỗi dòng sản phẩm có nút **Sửa** và **Xóa**.
 
-- `category` là một trong: `banh-kem`, `banh-ngot`, `banh-mi`, `banh-quy` (sửa trong `server/categories.js`).
-- `featured: true` để hiện ở mục "Bánh bán chạy" trang chủ.
-- Ảnh có thể để trong `client/public/` và dùng đường dẫn `/ten-anh.jpg`. Nếu link ảnh lỗi, web tự hiện ảnh thay thế.
+Danh mục bánh (Bánh kem, Bánh ngọt, Bánh mì, Bánh quy) sửa trong `server/categories.js`.
+
+Dữ liệu thật nằm ở `server/data/products.json`, `server/data/orders.json` và ảnh ở `server/uploads/`. Các file này không đưa lên git, nên `git pull` trên máy chủ không làm mất dữ liệu. Nhớ sao lưu các file này định kỳ.
 
 ## API
 
@@ -93,6 +90,10 @@ Mở `server/data/products.json`, thêm một mục theo mẫu:
 | GET | `/api/categories` | Danh mục |
 | GET | `/api/products?category=&q=&featured=` | Danh sách bánh |
 | GET | `/api/products/:id` | Chi tiết bánh |
+| POST | `/api/products` | Thêm bánh (cần header `x-admin-key`) |
+| PUT | `/api/products/:id` | Sửa bánh (cần header `x-admin-key`) |
+| DELETE | `/api/products/:id` | Xóa bánh (cần header `x-admin-key`) |
+| POST | `/api/products/upload` | Tải ảnh lên, form-data field `image` (cần header `x-admin-key`) |
 | POST | `/api/orders` | Tạo đơn hàng |
 | GET | `/api/orders/:code` | Tra cứu đơn theo mã |
 | GET | `/api/orders` | Danh sách đơn (cần header `x-admin-key`) |

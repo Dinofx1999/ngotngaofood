@@ -1,22 +1,14 @@
 const express = require('express');
 const crypto = require('crypto');
 const db = require('../db');
+const { requireAdmin } = require('../auth');
 
 const router = express.Router();
 
-// Mã quản trị để xem/cập nhật đơn hàng (đổi bằng biến môi trường ADMIN_KEY)
-const ADMIN_KEY = process.env.ADMIN_KEY || 'ngotngao123';
 const STATUSES = ['pending', 'confirmed', 'delivering', 'done', 'cancelled'];
 const PAYMENT_METHODS = ['cod', 'bank'];
 const FREE_SHIP_FROM = 300000;
 const SHIPPING_FEE = 20000;
-
-function requireAdmin(req, res, next) {
-  if (req.get('x-admin-key') !== ADMIN_KEY) {
-    return res.status(401).json({ message: 'Mã quản trị không đúng' });
-  }
-  next();
-}
 
 function makeCode() {
   const ymd = new Date().toISOString().slice(2, 10).replace(/-/g, '');

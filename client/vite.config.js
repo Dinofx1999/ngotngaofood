@@ -6,6 +6,6 @@ export default defineConfig({
   server: {
     port: 3000,
     // Mọi request /api được chuyển sang server Node.js
-    proxy: { '/api': 'http://localhost:5050' },
+    proxy: { '/api': 'http://localhost:5050', '/uploads': 'http://localhost:5050' },
   },
 });

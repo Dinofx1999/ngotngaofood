@@ -1,4 +1,5 @@
 // Lưu trữ dữ liệu đơn giản bằng file JSON trong thư mục data/
+// Nếu chưa có file <name>.json nhưng có <name>.seed.json thì tự tạo từ file seed (dữ liệu mẫu)
 const fs = require('fs');
 const path = require('path');
 
@@ -12,8 +13,14 @@ function read(name) {
   try {
     return JSON.parse(fs.readFileSync(filePath(name), 'utf8'));
   } catch (err) {
-    if (err.code === 'ENOENT') return [];
-    throw err;
+    if (err.code !== 'ENOENT') throw err;
+    const seedPath = path.join(DATA_DIR, `${name}.seed.json`);
+    if (fs.existsSync(seedPath)) {
+      const seed = JSON.parse(fs.readFileSync(seedPath, 'utf8'));
+      write(name, seed);
+      return seed;
+    }
+    return [];
   }
 }
 

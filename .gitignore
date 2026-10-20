@@ -2,3 +2,6 @@ node_modules/
 client/dist/
 .env
 .DS_Store
+server/data/products.json
+server/data/orders.json
+server/uploads/

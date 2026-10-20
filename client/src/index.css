@@ -215,3 +215,27 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 12px 0; }
   .toolbar { flex-direction: column; align-items: stretch; }
   .search input { min-width: 0; }
 }
+
+/* Admin: tabs & quản lý sản phẩm */
+.tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--border); margin-bottom: 22px; }
+.tabs button { background: none; border: 0; padding: 10px 16px; font-weight: 700; font-size: 1rem; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -2px; }
+.tabs button.active { color: var(--pink-dark); border-color: var(--pink); }
+.product-form { margin-bottom: 22px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.field select { padding: 11px 14px; border: 2px solid var(--border); border-radius: 10px; outline: none; font-weight: 500; background: var(--white); }
+.field select:focus { border-color: var(--pink); }
+.image-picker { display: flex; gap: 16px; align-items: flex-start; }
+.image-preview { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; border: 2px solid var(--border); flex-shrink: 0; }
+.image-picker-controls { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.image-picker-controls input[type="text"], .image-picker-controls input:not([type]) { padding: 10px 14px; border: 2px solid var(--border); border-radius: 10px; outline: none; font-weight: 500; }
+.image-picker-controls input[type="file"] { font-weight: 500; }
+.checkbox { display: flex; align-items: center; gap: 10px; font-weight: 600; margin: 4px 0 14px; cursor: pointer; }
+.checkbox input { width: 18px; height: 18px; accent-color: var(--pink); }
+.product-admin-list { display: flex; flex-direction: column; gap: 10px; }
+.product-admin-row { display: grid; grid-template-columns: 64px 1fr auto auto; gap: 14px; align-items: center; background: var(--white); border-radius: var(--radius); padding: 10px 14px; box-shadow: var(--shadow); }
+.product-admin-row .cart-img { width: 64px; height: 64px; }
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .product-admin-row { grid-template-columns: 64px 1fr; }
+  .product-admin-row .price, .product-admin-row .row-actions { grid-column: 2; }
+}

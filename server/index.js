@@ -19,6 +19,9 @@ app.get('/api/categories', (req, res) => res.json(CATEGORIES));
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 
+// Ảnh sản phẩm do quản trị tải lên
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use('/api', (req, res) => res.status(404).json({ message: 'Không tìm thấy API' }));
 
 // Khi đã build React (npm run build), server phục vụ luôn giao diện

@@ -4,7 +4,8 @@
   "private": true,
   "description": "Website bán bánh Ngọt Ngào Food - Node.js + React",
   "scripts": {
-    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "postinstall": "npm --prefix server install && npm --prefix client install",
+    "install:all": "npm install",
     "dev": "concurrently -n server,client -c blue,magenta \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
     "build": "npm --prefix client run build",
     "start": "npm --prefix server start"
