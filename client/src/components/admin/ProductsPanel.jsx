@@ -28,6 +28,18 @@ export default function ProductsPanel({ adminKey }) {
     load();
   };
 
+  const move = async (index, dir) => {
+    const target = index + dir;
+    if (target < 0 || target >= products.length) return;
+    const ids = products.map((p) => p.id);
+    [ids[index], ids[target]] = [ids[target], ids[index]];
+    try {
+      setProducts(await api.adminReorderProducts(adminKey, ids));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   const handleDelete = async (product) => {
     if (!window.confirm(`Xóa "${product.name}"?`)) return;
     try {
@@ -42,7 +54,10 @@ export default function ProductsPanel({ adminKey }) {
   return (
     <>
       <div className="section-head">
-        <h2 className="section-title">Sản phẩm ({products.length})</h2>
+        <div>
+          <h2 className="section-title">Sản phẩm ({products.length})</h2>
+          <div className="muted small">Thứ tự ở đây là thứ tự hiện trên thực đơn và trang chủ. Dùng ↑ ↓ để đổi.</div>
+        </div>
         {!editing && (
           <button className="btn btn-primary btn-sm" onClick={() => setEditing('new')}>+ Thêm sản phẩm</button>
         )}
@@ -63,15 +78,20 @@ export default function ProductsPanel({ adminKey }) {
         <p className="muted">Chưa có sản phẩm nào. Bấm "Thêm sản phẩm" để bắt đầu.</p>
       ) : (
         <div className="product-admin-list">
-          {products.map((p) => (
+          {products.map((p, index) => (
             <div key={p.id} className="product-admin-row">
               <ProductImage src={p.image} alt={p.name} className="cart-img" />
               <div>
                 <div className="cart-name">{p.name} {p.featured && <span title="Bán chạy">⭐</span>}</div>
-                <div className="muted small">{categoryName(p.category)} · {p.unit}</div>
+                <div className="muted small">
+                  {categoryName(p.category)} · {p.unit}
+                  {p.images?.length > 1 && <> · 📷 {p.images.length} ảnh</>}
+                </div>
               </div>
               <div className="price">{formatPrice(p.price)}</div>
               <div className="row-actions">
+                <button className="btn-icon" onClick={() => move(index, -1)} disabled={index === 0} aria-label="Lên">↑</button>
+                <button className="btn-icon" onClick={() => move(index, 1)} disabled={index === products.length - 1} aria-label="Xuống">↓</button>
                 <button className="btn btn-outline btn-sm" onClick={() => setEditing(p)}>Sửa</button>
                 <button className="btn btn-text btn-sm" onClick={() => handleDelete(p)}>Xóa</button>
               </div>

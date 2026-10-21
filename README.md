@@ -15,7 +15,7 @@ Website bán bánh đơn giản, dễ dùng, xây dựng bằng **Node.js (Expre
 
 **Quản trị** (`/admin`)
 - Tab **Đơn hàng**: xem toàn bộ đơn, thống kê nhanh, lọc và cập nhật trạng thái (Chờ xác nhận → Đã xác nhận → Đang giao → Hoàn thành / Đã hủy)
-- Tab **Sản phẩm**: thêm / sửa / xóa bánh, tải ảnh từ máy lên hoặc dán link ảnh, đánh dấu "bán chạy"
+- Tab **Sản phẩm**: thêm / sửa / xóa bánh, mỗi bánh tối đa 8 ảnh (tải từ máy hoặc dán link, ảnh đầu là ảnh chính), đánh dấu "bán chạy", sắp xếp thứ tự hiển thị bằng ↑ ↓
 - Tab **Danh mục**: thêm / đổi tên / đổi biểu tượng / sắp xếp / xóa danh mục bánh (không xóa được danh mục còn bánh)
 - Tab **Cửa hàng**: đổi ảnh lớn và câu chào ở trang chủ; sửa tên, slogan, địa chỉ, điện thoại, email, giờ mở cửa, link Facebook/Zalo, thông tin chuyển khoản, phí giao hàng
 - Mã quản trị mặc định: `ngotngao123` (đổi bằng biến môi trường `ADMIN_KEY`)
@@ -84,10 +84,10 @@ ADMIN_KEY=matkhau-cua-ban npm start
 Vào **http://localhost:3000/admin** (hoặc địa chỉ web của bạn + `/admin`), nhập mã quản trị, chọn tab **Sản phẩm**:
 
 - Bấm **+ Thêm sản phẩm**, điền tên, danh mục, giá, đơn vị, mô tả.
-- Ảnh: bấm **Choose File** để tải ảnh từ máy (tối đa 5MB), hoặc dán link ảnh vào ô bên dưới.
+- Ảnh: bấm **Choose File** để tải một hoặc nhiều ảnh từ máy (mỗi ảnh tối đa 5MB), hoặc dán link ảnh rồi bấm **Thêm link**. Tối đa 8 ảnh, ảnh đầu tiên là ảnh chính, dùng ← → để đổi thứ tự, ✕ để bỏ ảnh. Trang chi tiết bánh có dải ảnh nhỏ để khách bấm xem.
 - Tick "Hiện ở mục Bánh bán chạy" nếu muốn bánh xuất hiện ở trang chủ.
 - Bấm **Lưu sản phẩm**. Bánh hiện ngay trên thực đơn, không cần khởi động lại.
-- Mỗi dòng sản phẩm có nút **Sửa** và **Xóa**.
+- Mỗi dòng sản phẩm có nút **↑ ↓** (đổi vị trí hiển thị trên thực đơn và trang chủ), **Sửa** và **Xóa**.
 
 Danh mục bánh sửa ở tab **Danh mục** trong trang quản trị: thêm tên và biểu tượng (emoji), dùng nút ↑ ↓ để đổi thứ tự hiển thị.
 
@@ -109,7 +109,8 @@ Dữ liệu thật nằm ở `server/data/products.json`, `server/data/categorie
 | GET | `/api/settings` | Thông tin cửa hàng |
 | PUT | `/api/settings` | Sửa thông tin cửa hàng (cần header `x-admin-key`) |
 | GET | `/api/products?category=&q=&featured=` | Danh sách bánh |
-| GET | `/api/products/:id` | Chi tiết bánh |
+| GET | `/api/products/:id` | Chi tiết bánh (có `image` là ảnh chính và `images` là tất cả ảnh) |
+| PUT | `/api/products/order` | Sắp xếp thứ tự bánh, body `{ ids: [...] }` (cần header `x-admin-key`) |
 | POST | `/api/products` | Thêm bánh (cần header `x-admin-key`) |
 | PUT | `/api/products/:id` | Sửa bánh (cần header `x-admin-key`) |
 | DELETE | `/api/products/:id` | Xóa bánh (cần header `x-admin-key`) |

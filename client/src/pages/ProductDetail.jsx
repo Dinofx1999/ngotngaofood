@@ -16,10 +16,12 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [error, setError] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
     setProduct(null);
     setError('');
+    setActiveImage(0);
     api.getProduct(id).then(setProduct).catch((e) => setError(e.message));
   }, [id]);
 
@@ -32,6 +34,8 @@ export default function ProductDetail() {
     );
   }
   if (!product) return <div className="container section muted">Đang tải...</div>;
+
+  const images = product.images?.length ? product.images : product.image ? [product.image] : [];
 
   const handleAdd = () => {
     addItem(product, quantity);
@@ -47,7 +51,18 @@ export default function ProductDetail() {
     <div className="container section">
       <Link to="/thuc-don" className="link">← Về thực đơn</Link>
       <div className="detail">
-        <ProductImage src={product.image} alt={product.name} className="detail-img" />
+        <div className="gallery">
+          <ProductImage src={images[activeImage] || ''} alt={product.name} className="detail-img" />
+          {images.length > 1 && (
+            <div className="thumbs">
+              {images.map((url, i) => (
+                <button key={url + i} type="button" className={i === activeImage ? 'active' : ''} onClick={() => setActiveImage(i)} aria-label={`Ảnh ${i + 1}`}>
+                  <ProductImage src={url} alt="" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="detail-info">
           <h1>{product.name}</h1>
           <div className="price price-lg">{formatPrice(product.price)}</div>

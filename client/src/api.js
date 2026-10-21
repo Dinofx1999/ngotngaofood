@@ -49,6 +49,8 @@ export const api = {
   adminUpdateProduct: (key, id, data) =>
     request(`/products/${id}`, { method: 'PUT', headers: adminHeaders(key), body: JSON.stringify(data) }),
   adminDeleteProduct: (key, id) => request(`/products/${id}`, { method: 'DELETE', headers: adminHeaders(key) }),
+  adminReorderProducts: (key, ids) =>
+    request('/products/order', { method: 'PUT', headers: adminHeaders(key), body: JSON.stringify({ ids }) }),
   adminUploadImage: (key, file) => {
     const form = new FormData();
     form.append('image', file);

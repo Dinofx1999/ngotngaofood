@@ -2,24 +2,44 @@ import { useState } from 'react';
 import { api } from '../../api';
 import ProductImage from '../ProductImage';
 
-const EMPTY = { name: '', category: '', price: '', unit: 'cái', description: '', image: '', featured: false };
+const EMPTY = { name: '', category: '', price: '', unit: 'cái', description: '', featured: false };
+const MAX_IMAGES = 8;
 
 export default function ProductForm({ initial, categories, adminKey, onSave, onCancel }) {
   const [form, setForm] = useState({ ...EMPTY, category: categories[0]?.id || '', ...(initial || {}) });
+  const [images, setImages] = useState(
+    initial?.images?.length ? initial.images : initial?.image ? [initial.image] : []
+  );
+  const [urlDraft, setUrlDraft] = useState('');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
 
-  const handleFile = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const addImages = (urls) => setImages((list) => [...list, ...urls].slice(0, MAX_IMAGES));
+  const removeImage = (index) => setImages((list) => list.filter((_, i) => i !== index));
+  const moveImage = (index, dir) =>
+    setImages((list) => {
+      const target = index + dir;
+      if (target < 0 || target >= list.length) return list;
+      const next = [...list];
+      [next[index], next[target]] = [next[target], next[index]];
+      return next;
+    });
+
+  const handleFiles = async (e) => {
+    const files = Array.from(e.target.files || []).slice(0, MAX_IMAGES - images.length);
+    if (files.length === 0) return;
     setUploading(true);
     setError('');
     try {
-      const { url } = await api.adminUploadImage(adminKey, file);
-      set('image', url);
+      const urls = [];
+      for (const file of files) {
+        const { url } = await api.adminUploadImage(adminKey, file);
+        urls.push(url);
+      }
+      addImages(urls);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -28,12 +48,19 @@ export default function ProductForm({ initial, categories, adminKey, onSave, onC
     }
   };
 
+  const handleAddUrl = () => {
+    const url = urlDraft.trim();
+    if (!url) return;
+    addImages([url]);
+    setUrlDraft('');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
     setError('');
     try {
-      await onSave({ ...form, price: Number(form.price) });
+      await onSave({ ...form, price: Number(form.price), images, image: images[0] || '' });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -72,13 +99,32 @@ export default function ProductForm({ initial, categories, adminKey, onSave, onC
       </label>
 
       <div className="field">
-        <span>Ảnh sản phẩm</span>
-        <div className="image-picker">
-          <ProductImage src={form.image} alt="Xem trước" className="image-preview" />
-          <div className="image-picker-controls">
-            <input type="file" accept="image/*" onChange={handleFile} disabled={uploading} />
-            {uploading && <div className="muted small">Đang tải ảnh lên...</div>}
-            <input value={form.image} onChange={(e) => set('image', e.target.value)} placeholder="Hoặc dán link ảnh: https://..." />
+        <span>Ảnh sản phẩm ({images.length}/{MAX_IMAGES}) – ảnh đầu tiên là ảnh chính, dùng ← → để đổi thứ tự</span>
+        <div className="gallery-editor">
+          {images.map((url, i) => (
+            <div key={url + i} className="gallery-item">
+              <ProductImage src={url} alt={`Ảnh ${i + 1}`} className="gallery-thumb" />
+              {i === 0 && <span className="gallery-main">Ảnh chính</span>}
+              <div className="gallery-actions">
+                <button type="button" onClick={() => moveImage(i, -1)} disabled={i === 0} aria-label="Sang trái">←</button>
+                <button type="button" onClick={() => moveImage(i, 1)} disabled={i === images.length - 1} aria-label="Sang phải">→</button>
+                <button type="button" onClick={() => removeImage(i)} aria-label="Xóa ảnh">✕</button>
+              </div>
+            </div>
+          ))}
+          {images.length === 0 && (
+            <div className="gallery-item">
+              <ProductImage src="" alt="Chưa có ảnh" className="gallery-thumb" />
+              <div className="muted small center">Chưa có ảnh</div>
+            </div>
+          )}
+        </div>
+        <div className="image-picker-controls">
+          <input type="file" accept="image/*" multiple onChange={handleFiles} disabled={uploading || images.length >= MAX_IMAGES} />
+          {uploading && <div className="muted small">Đang tải ảnh lên...</div>}
+          <div className="add-row-inline">
+            <input value={urlDraft} onChange={(e) => setUrlDraft(e.target.value)} placeholder="Hoặc dán link ảnh: https://..." disabled={images.length >= MAX_IMAGES} />
+            <button type="button" className="btn btn-outline btn-sm" onClick={handleAddUrl} disabled={!urlDraft.trim() || images.length >= MAX_IMAGES}>Thêm link</button>
           </div>
         </div>
       </div>
