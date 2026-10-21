@@ -3,6 +3,7 @@ import { useSettings } from '../context/SettingsContext';
 
 export default function Footer() {
   const s = useSettings();
+  const hasLegal = s.companyName || s.taxCode || s.businessLicense || s.representative || s.legalAddress;
 
   return (
     <footer className="footer">
@@ -31,7 +32,16 @@ export default function Footer() {
           <p><Link to="/admin">Quản trị</Link></p>
         </div>
       </div>
-      <div className="container footer-bottom muted">© {new Date().getFullYear()} {s.name}</div>
+      {hasLegal && (
+        <div className="container footer-legal muted small">
+          {s.companyName && <div><b>{s.companyName}</b></div>}
+          {s.taxCode && <div>Mã số thuế: {s.taxCode}</div>}
+          {s.businessLicense && <div>Giấy chứng nhận ĐKKD: {s.businessLicense}</div>}
+          {s.representative && <div>Người đại diện: {s.representative}</div>}
+          {s.legalAddress && <div>Địa chỉ đăng ký: {s.legalAddress}</div>}
+        </div>
+      )}
+      <div className="container footer-bottom muted">© {new Date().getFullYear()} {s.companyName || s.name}</div>
     </footer>
   );
 }

@@ -15,6 +15,14 @@ const FIELDS = [
   { key: 'zalo', label: 'Link Zalo', placeholder: 'https://zalo.me/...' },
 ];
 
+const COMPANY_FIELDS = [
+  { key: 'companyName', label: 'Tên công ty / hộ kinh doanh', placeholder: 'Công ty TNHH Ngọt Ngào Food', full: true },
+  { key: 'taxCode', label: 'Mã số thuế', placeholder: '0401234567' },
+  { key: 'businessLicense', label: 'Số giấy chứng nhận ĐKKD, nơi cấp, ngày cấp', placeholder: 'Số 0401234567 do Sở KH&ĐT TP. Đà Nẵng cấp ngày 01/01/2026' },
+  { key: 'representative', label: 'Người đại diện', placeholder: 'Nguyễn Văn A' },
+  { key: 'legalAddress', label: 'Địa chỉ đăng ký kinh doanh (nếu khác địa chỉ cửa hàng)', placeholder: 'Phường Quảng Phú, TP. Đà Nẵng' },
+];
+
 const BANK_FIELDS = [
   { key: 'bankName', label: 'Ngân hàng', placeholder: 'Vietcombank' },
   { key: 'bankAccount', label: 'Số tài khoản', placeholder: '0123456789' },
@@ -116,6 +124,10 @@ export default function SettingsPanel({ adminKey }) {
       <h3>Thông tin cửa hàng & liên hệ</h3>
       <p className="muted small">Hiển thị ở chân trang và trang thanh toán. Để trống mục nào thì mục đó sẽ không hiện.</p>
       <div className="form-grid">{FIELDS.map(renderField)}</div>
+
+      <h3>Thông tin công ty</h3>
+      <p className="muted small">Hiện ở cuối chân trang. Để trống mục nào thì mục đó không hiện.</p>
+      <div className="form-grid">{COMPANY_FIELDS.map(renderField)}</div>
 
       <h3>Thông tin chuyển khoản</h3>
       <p className="muted small">Hiện cho khách khi chọn "Chuyển khoản ngân hàng" lúc đặt hàng.</p>

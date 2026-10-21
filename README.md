@@ -17,7 +17,7 @@ Website bán bánh đơn giản, dễ dùng, xây dựng bằng **Node.js (Expre
 - Tab **Đơn hàng**: xem toàn bộ đơn, thống kê nhanh, lọc và cập nhật trạng thái (Chờ xác nhận → Đã xác nhận → Đang giao → Hoàn thành / Đã hủy)
 - Tab **Sản phẩm**: thêm / sửa / xóa bánh, mỗi bánh tối đa 8 ảnh (tải từ máy hoặc dán link, ảnh đầu là ảnh chính), đánh dấu "bán chạy", sắp xếp thứ tự hiển thị bằng ↑ ↓
 - Tab **Danh mục**: thêm / đổi tên / đổi biểu tượng / sắp xếp / xóa danh mục bánh (không xóa được danh mục còn bánh)
-- Tab **Cửa hàng**: đổi ảnh lớn và câu chào ở trang chủ; sửa tên, slogan, địa chỉ, điện thoại, email, giờ mở cửa, link Facebook/Zalo, thông tin chuyển khoản, phí giao hàng
+- Tab **Cửa hàng**: đổi ảnh lớn và câu chào ở trang chủ; sửa tên, slogan, địa chỉ, điện thoại, email, giờ mở cửa, link Facebook/Zalo; thông tin công ty (tên công ty, mã số thuế, giấy phép kinh doanh, người đại diện); thông tin chuyển khoản; phí giao hàng
 - Mã quản trị mặc định: `ngotngao123` (đổi bằng biến môi trường `ADMIN_KEY`)
 
 ## Cấu trúc thư mục

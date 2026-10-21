@@ -19,9 +19,14 @@ const DEFAULTS = {
   heroTitle: 'Ngọt ngào trong từng chiếc bánh',
   heroSubtitle: 'Bánh kem, bánh ngọt và bánh mì tươi làm mới mỗi ngày từ nguyên liệu tự nhiên. Đặt hàng online, giao tận nơi trong 2 giờ.',
   heroImage: '',
+  companyName: '',
+  taxCode: '',
+  businessLicense: '',
+  representative: '',
+  legalAddress: '',
 };
 
-const STRING_FIELDS = ['name', 'tagline', 'address', 'phone', 'email', 'openingHours', 'facebook', 'zalo', 'bankName', 'bankAccount', 'bankOwner', 'heroTag', 'heroTitle', 'heroSubtitle', 'heroImage'];
+const STRING_FIELDS = ['name', 'tagline', 'address', 'phone', 'email', 'openingHours', 'facebook', 'zalo', 'bankName', 'bankAccount', 'bankOwner', 'heroTag', 'heroTitle', 'heroSubtitle', 'heroImage', 'companyName', 'taxCode', 'businessLicense', 'representative', 'legalAddress'];
 const MAX_LENGTH = { heroImage: 1000, heroSubtitle: 500 };
 const NUMBER_FIELDS = ['freeShipFrom', 'shippingFee'];
 
