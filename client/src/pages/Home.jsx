@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api';
 import ProductCard from '../components/ProductCard';
+import HeroSlider from '../components/HeroSlider';
 import { DEFAULT_HERO_IMAGE, useSettings } from '../context/SettingsContext';
 import { formatPrice } from '../utils';
 
@@ -28,11 +29,9 @@ export default function Home() {
               <Link to="/tra-cuu" className="btn btn-outline btn-lg">Tra cứu đơn hàng</Link>
             </div>
           </div>
-          <img
-            className="hero-img"
-            src={settings.heroImage || DEFAULT_HERO_IMAGE}
+          <HeroSlider
+            images={settings.heroImages?.length ? settings.heroImages : [DEFAULT_HERO_IMAGE]}
             alt={settings.name}
-            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/placeholder.svg'; }}
           />
         </div>
       </section>

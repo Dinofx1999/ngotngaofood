@@ -19,6 +19,7 @@ const DEFAULTS = {
   heroTitle: 'Ngọt ngào trong từng chiếc bánh',
   heroSubtitle: 'Bánh kem, bánh ngọt và bánh mì tươi làm mới mỗi ngày từ nguyên liệu tự nhiên. Đặt hàng online, giao tận nơi trong 2 giờ.',
   heroImage: '',
+  heroImages: [],
   companyName: '',
   taxCode: '',
   businessLicense: '',
@@ -28,12 +29,20 @@ const DEFAULTS = {
 
 const STRING_FIELDS = ['name', 'tagline', 'address', 'phone', 'email', 'openingHours', 'facebook', 'zalo', 'bankName', 'bankAccount', 'bankOwner', 'heroTag', 'heroTitle', 'heroSubtitle', 'heroImage', 'companyName', 'taxCode', 'businessLicense', 'representative', 'legalAddress'];
 const MAX_LENGTH = { heroImage: 1000, heroSubtitle: 500 };
+const ARRAY_FIELDS = ['heroImages'];
+const MAX_IMAGES = 8;
 const NUMBER_FIELDS = ['freeShipFrom', 'shippingFee'];
 
 function getSettings() {
   const saved = db.read('settings');
   const data = saved && !Array.isArray(saved) ? saved : {};
-  return { ...DEFAULTS, ...data };
+  const merged = { ...DEFAULTS, ...data };
+  // Ảnh trang chủ: mảng heroImages, dữ liệu cũ chỉ có heroImage thì chuyển thành mảng 1 ảnh
+  if (!Array.isArray(merged.heroImages) || merged.heroImages.length === 0) {
+    merged.heroImages = merged.heroImage ? [merged.heroImage] : [];
+  }
+  merged.heroImage = merged.heroImages[0] || '';
+  return merged;
 }
 
 // Kiểm tra dữ liệu gửi lên, trả về { data } hoặc { error }
@@ -42,6 +51,13 @@ function parseSettings(body, current) {
   for (const key of STRING_FIELDS) {
     if (body[key] !== undefined) next[key] = String(body[key]).trim().slice(0, MAX_LENGTH[key] || 300);
   }
+  for (const key of ARRAY_FIELDS) {
+    if (body[key] !== undefined) {
+      if (!Array.isArray(body[key])) return { error: 'Danh sách ảnh không hợp lệ' };
+      next[key] = body[key].map((u) => String(u || '').trim().slice(0, 1000)).filter(Boolean).slice(0, MAX_IMAGES);
+    }
+  }
+  if (body.heroImages !== undefined) next.heroImage = next.heroImages[0] || '';
   for (const key of NUMBER_FIELDS) {
     if (body[key] !== undefined) {
       const n = Number(body[key]);

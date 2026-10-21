@@ -20,5 +20,6 @@
   "taxCode": "",
   "businessLicense": "",
   "representative": "",
-  "legalAddress": ""
+  "legalAddress": "",
+  "heroImages": []
 }

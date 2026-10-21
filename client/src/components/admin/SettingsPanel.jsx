@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../api';
-import { DEFAULT_HERO_IMAGE, useSettings, useSettingsRefresh } from '../../context/SettingsContext';
+import { useSettings, useSettingsRefresh } from '../../context/SettingsContext';
 import { useToast } from '../../context/ToastContext';
-import ProductImage from '../ProductImage';
+import ImageListEditor from './ImageListEditor';
 
 const FIELDS = [
   { key: 'name', label: 'Tên cửa hàng *', placeholder: 'Ngọt Ngào Food' },
@@ -42,22 +42,6 @@ export default function SettingsPanel({ adminKey }) {
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
 
-  const handleHeroFile = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    setError('');
-    try {
-      const { url } = await api.adminUploadImage(adminKey, file);
-      set('heroImage', url);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setUploading(false);
-      e.target.value = '';
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -95,16 +79,16 @@ export default function SettingsPanel({ adminKey }) {
       <h3>Trang chủ</h3>
       <p className="muted small">Ảnh lớn và câu chào ở đầu trang chủ.</p>
       <div className="field">
-        <span>Ảnh lớn trang chủ</span>
-        <div className="image-picker">
-          <ProductImage src={form.heroImage || DEFAULT_HERO_IMAGE} alt="Ảnh trang chủ" className="image-preview hero-preview" />
-          <div className="image-picker-controls">
-            <input type="file" accept="image/*" onChange={handleHeroFile} disabled={uploading} />
-            {uploading && <div className="muted small">Đang tải ảnh lên...</div>}
-            <input value={form.heroImage ?? ''} onChange={(e) => set('heroImage', e.target.value)} placeholder="Hoặc dán link ảnh: https://... (để trống = ảnh mặc định)" />
-            <div className="muted small">Nên dùng ảnh ngang, tỉ lệ 4:3, tối đa 5MB.</div>
-          </div>
-        </div>
+        <span>Ảnh slide trang chủ ({(form.heroImages || []).length}/8) – có từ 2 ảnh trở lên sẽ tự chạy slide, không có ảnh thì dùng ảnh mặc định</span>
+        <ImageListEditor
+          images={form.heroImages || []}
+          onChange={(list) => set('heroImages', list)}
+          adminKey={adminKey}
+          max={8}
+          mainLabel="Ảnh 1"
+          onUploading={setUploading}
+        />
+        <div className="muted small">Nên dùng ảnh ngang, cùng tỉ lệ 4:3, mỗi ảnh tối đa 5MB.</div>
       </div>
       <div className="form-grid">
         <label className="field">
